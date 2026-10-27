@@ -1,0 +1,7 @@
+# Local tooling and OS noise
+node_modules/
+.DS_Store
+Thumbs.db
+
+# Local preview artifacts
+*.log
