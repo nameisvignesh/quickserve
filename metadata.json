@@ -1,0 +1,8 @@
+{
+  "name": "QuickServe - On-Demand Home Services",
+  "description": "Comprehensive on-demand home services platform with customer bookings, nested sub-service catalogs, verified employee job portal, and admin control center.",
+  "permissions": [],
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

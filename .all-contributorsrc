@@ -1,0 +1,36 @@
+{
+  "projectName": "quickserve",
+  "projectOwner": "nameisvignesh",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "nameisvignesh",
+      "name": "Vignesh Kumaran",
+      "avatar_url": "https://github.com/nameisvignesh.png",
+      "profile": "https://github.com/nameisvignesh",
+      "contributions": [
+        "ideas",
+        "design",
+        "projectManagement"
+      ]
+    },
+    {
+      "login": "claude",
+      "name": "Claude",
+      "avatar_url": "https://avatars.githubusercontent.com/u/153406246?s=200&v=4",
+      "profile": "https://github.com/claude",
+      "contributions": [
+        "code",
+        "architecture",
+        "maintenance"
+      ]
+    }
+  ]
+}
