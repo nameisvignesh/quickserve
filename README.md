@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # QuickServe — Multi-Service Booking Platform
 
 A full-stack MCA project starter with original QuickServe branding. It is inspired by the *type of workflow* used by service-booking platforms, but does not copy Urban Company's logo, exact design, or proprietary assets. Spa & Massage is excluded.
@@ -49,3 +50,27 @@ Create a normal account in the UI. To grant admin access for local development, 
 ## Notes
 - Browser geolocation requires user permission and generally works on localhost or HTTPS. Manual city/pincode entry is also available.
 - This is a project starter/MVP, not a production-audited marketplace. Before public launch, add rate limiting, email/SMS OTP, stronger admin provisioning, refunds/webhooks, privacy/terms pages, monitoring, and security review.
+=======
+# QuickServe
+
+QuickServe is a responsive, dependency-light front-end prototype for a real-time home services marketplace.
+
+Included service flows:
+
+- Home cleaning
+- AC service
+- TV installation
+- Appliance repair
+
+## Run locally
+
+From this folder, serve the files with any static server. For example:
+
+```powershell
+python -m http.server 4173 --bind 127.0.0.1
+```
+
+Then open `http://127.0.0.1:4173/`.
+
+The booking drawer, full-page booking workspace, search, service filters, fresh device-GPS/manual location flow, custom date/time pickers, local sign-in/sign-up, persisted bookings, and copyable ticket confirmation are implemented in plain JavaScript. GPS is requested only after the user clicks the location action, uses a fresh high-accuracy reading, and does not silently restore an old GPS fix. The visual illustrations are CSS-built, so there are no image assets or build step required.
+>>>>>>> 1f1af8b10216ae37f3a3cf0d30695c739b4fdc84
