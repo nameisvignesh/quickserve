@@ -1,76 +1,52 @@
-<<<<<<< HEAD
-# QuickServe — Multi-Service Booking Platform
-
-A full-stack MCA project starter with original QuickServe branding. It is inspired by the *type of workflow* used by service-booking platforms, but does not copy Urban Company's logo, exact design, or proprietary assets. Spa & Massage is excluded.
-
-## Included
-- React + Vite responsive frontend
-- Node.js + Express API
-- MongoDB persistence (Mongoose)
-- JWT customer/admin authentication
-- Service catalogue, location/pincode search, booking creation and booking history
-- Admin booking/service dashboard endpoints
-- Razorpay checkout integration hooks (test mode)
-- Socket.IO booking-status event foundation
-- Server-side price calculation and payment verification endpoint
-
-## Requirements
-Install Node.js 20+ and MongoDB (local MongoDB Community Server or MongoDB Atlas account).
-
-## Setup
-1. Extract the ZIP to a folder such as `C:\\QuickServe`.
-2. Install dependencies from the QuickServe folder:
-   ```bash
-   npm install
-   npm run install:all
-   ```
-3. Copy `server/.env.example` to `server/.env` and fill in your MongoDB URI and JWT secret.
-4. Optional payment setup: create a Razorpay account, use **test keys** first, and add `RAZORPAY_KEY_ID` and `RAZORPAY_KEY_SECRET` to `server/.env`. Never put the secret key in the React client.
-5. Seed demo services:
-   ```bash
-   npm run seed --prefix server
-   ```
-6. Start both apps:
-   ```bash
-   npm run dev
-   ```
-7. Open the Vite URL shown in the terminal (usually `http://localhost:5173`).
-
-API runs on `http://localhost:5000`.
-
-## Demo admin
-Create a normal account in the UI. To grant admin access for local development, register a user and set that user's `role` to `admin` in MongoDB. Do not expose this method in a production deployment.
-
-## Payments
-- Without Razorpay credentials, the app stays in demo checkout mode and clearly labels payment as a demo; it does **not** collect real money.
-- With Razorpay test credentials, the checkout flow uses Razorpay test mode and the server verifies the signature.
-- Real payments require an approved Razorpay account, live keys, and production deployment over HTTPS. Never commit `.env`.
-- A payment success page alone is not proof of payment; the server verification endpoint is required.
-
-## Notes
-- Browser geolocation requires user permission and generally works on localhost or HTTPS. Manual city/pincode entry is also available.
-- This is a project starter/MVP, not a production-audited marketplace. Before public launch, add rate limiting, email/SMS OTP, stronger admin provisioning, refunds/webhooks, privacy/terms pages, monitoring, and security review.
-=======
 # QuickServe
 
-QuickServe is a responsive, dependency-light front-end prototype for a real-time home services marketplace.
-
-Included service flows:
-
-- Home cleaning
-- AC service
-- TV installation
-- Appliance repair
+QuickServe is a full-stack home-services marketplace inspired by the booking workflow of modern managed-service platforms. Customers can discover detailed service variants, choose a time and address, pay with a Google Pay/UPI QR or Razorpay test checkout, receive a ticket only after payment confirmation, track bookings, and cancel eligible appointments. It uses original QuickServe branding and assets.
 
 ## Run locally
 
-From this folder, serve the files with any static server. For example:
+Requirements: Node.js 20+.
 
 ```powershell
-python -m http.server 4173 --bind 127.0.0.1
+npm install
+npm run install:all
+npm run dev
 ```
 
-Then open `http://127.0.0.1:4173/`.
+Open `http://localhost:5173`. The API runs on `http://localhost:5000`.
 
-The booking drawer, full-page booking workspace, search, service filters, fresh device-GPS/manual location flow, custom date/time pickers, local sign-in/sign-up, persisted bookings, and copyable ticket confirmation are implemented in plain JavaScript. GPS is requested only after the user clicks the location action, uses a fresh high-accuracy reading, and does not silently restore an old GPS fix. The visual illustrations are CSS-built, so there are no image assets or build step required.
->>>>>>> 1f1af8b10216ae37f3a3cf0d30695c739b4fdc84
+The server starts in local SQLite mode when MongoDB is not installed or is unavailable. Customer and employee account records, password hashes, phone verification state and OTP state are stored in the SQL database at `server/data/quickserve.sqlite` by default. Set `SQLITE_PATH` to choose another SQLite file. Bookings and the catalogue still switch to MongoDB automatically when a reachable `MONGODB_URI` is provided.
+
+Routes:
+
+- `/` — customer marketplace, service options, Clerk sign-in/sign-up with email or SMS OTP, UPI QR checkout, reviews, About and dark mode.
+- `/admin` — owner-only operations dashboard. The default local owner is `admin2026@gmail.com` / `quickserveadmin2026`; set `OWNER_EMAIL` and `OWNER_PASSWORD` in `server/.env` before deployment.
+- `/admin/employees` — owner-only employee directory with profile photos and assigned-ticket status.
+- `/employee` — Clerk employee sign-in/sign-up, photo and signature onboarding, ticket queue, customer contact details, map navigation and ticket acceptance.
+
+## Optional persistent setup
+
+Copy `server/.env.example` to `server/.env`, set a long `JWT_SECRET`, and provide a local MongoDB or MongoDB Atlas URI:
+
+```powershell
+npm run seed --prefix server
+```
+
+If MongoDB is available, the API also seeds the default catalogue automatically on startup. SQLite is created automatically; no database server is required for local development.
+
+## Clerk authentication
+
+Copy `client/.env.example` and `server/.env.example` into the corresponding `.env` files. Set the same Clerk application keys in `VITE_CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY`, then enable the email and phone/SMS verification methods in the Clerk Dashboard. The frontend uses Clerk components for the user session and OTP verification; the API verifies Clerk bearer tokens before syncing the local customer or employee record. Without a publishable key, the local fallback authentication remains available with the explicitly labelled development-only OTP mode.
+
+For real SMS, configure `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN` and `TWILIO_FROM_NUMBER`. For local development without an SMS provider, `LOCAL_OTP_MODE=true` uses the configured `LOCAL_OTP_CODE` (default `123456`) and labels it as development-only. Set `LOCAL_OTP_MODE=false` in any shared or production environment; then phone verification is rejected until a real SMS provider is configured.
+
+## Payments
+
+Without Razorpay credentials, checkout generates a Google Pay/UPI URI and QR code using `QUICKSERVE_UPI_ID`. The browser polls payment status; in local demo mode the “Simulate successful scan” action exercises the same confirmation path. For real automatic confirmation, configure a UPI/Razorpay provider to call `/api/payments/upi/webhook` with `UPI_WEBHOOK_SECRET`. The server then creates the ticket and emits the booking update. For Razorpay test checkout, set `RAZORPAY_KEY_ID` and `RAZORPAY_KEY_SECRET` on the server only. The server verifies the Razorpay signature before confirming a booking.
+
+## Admin
+
+Admin endpoints require the exact configured owner email and an `admin` role. Employee endpoints require the `employee` role and a stored photo confirmation. Only paid, confirmed customer bookings become tickets; the admin and employee roadmaps then move them through assigned, arrived, in-progress and completed states.
+
+## Production checklist
+
+Configure a production client API URL, HTTPS, rate limiting, OTP/email verification, refund and payment webhooks, provider onboarding, service-area rules, monitoring, privacy/terms pages, and a security review before taking live bookings.
